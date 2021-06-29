@@ -361,7 +361,24 @@ class PlayState extends MusicBeatState
 
 		switch (SONG.song.toLowerCase())
 		{
-                        case 'spookeez' | 'monster' | 'south':
+                       
+			
+			      /*case 'climacophobia':
+				      {
+							curStage = 'park';
+
+						defaultCamZoom = 0.80;
+
+						var bg:FlxSprite = new FlxSprite(-200, -100).loadGraphic(Paths.image('parkbg', 'shared'));
+						bg.antialiasing = true;
+						//bg.scrollFactor.set(0.2, 0.2);
+						bg.active = false;
+						bg.setGraphicSize(Std.int(bg.width * 0.9));
+						bg.updateHitbox();
+						add(bg); */
+			
+			
+			      case 'spookeez' | 'monster' | 'south':
                         {
                                 curStage = 'spooky';
 	                          halloweenLevel = true;
@@ -706,7 +723,7 @@ class PlayState extends MusicBeatState
 
 		                            add(waveSprite);
 		                            add(waveSpriteFG);
-		                    */
+		                    */ 
 		          }
 		          default:
 		          {
@@ -3199,6 +3216,19 @@ class PlayState extends MusicBeatState
 	override function beatHit()
 	{
 		super.beatHit();
+        
+		if (curSong == 'climacophobia')
+			{
+			    switch (curBeat)
+	            {
+		         case 0:
+					dad.playAnim('fuckingdeadlol', true);
+		        case 18:
+					remove(dad);
+					dad = new Character(100, 100, 'stairs');
+					add(dad);
+ 	            }		
+			}
 
 		if (SONG.notes[Math.floor(curStep / 16)] != null)
 		{
