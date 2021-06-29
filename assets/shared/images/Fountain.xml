@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="Fountain.png">
+	<!-- Created with Adobe Animate version 20.0.2.22168 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="Area0000" x="0" y="0" width="2941" height="1783"/>
+	<SubTexture name="Area0001" x="0" y="0" width="2941" height="1783"/>
+	<SubTexture name="Area0002" x="2941" y="0" width="2941" height="1783"/>
+	<SubTexture name="Area0003" x="2941" y="0" width="2941" height="1783"/>
+	<SubTexture name="Area0004" x="0" y="1783" width="2941" height="1783"/>
+	<SubTexture name="Area0005" x="0" y="1783" width="2941" height="1783"/>
+	<SubTexture name="Area0006" x="2941" y="1783" width="2941" height="1783"/>
+	<SubTexture name="Area0007" x="2941" y="1783" width="2941" height="1783"/>
+	<SubTexture name="Area0008" x="0" y="3566" width="2941" height="1783"/>
+	<SubTexture name="Area0009" x="0" y="3566" width="2941" height="1783"/>
+	<SubTexture name="Area0010" x="2941" y="3566" width="2941" height="1783"/>
+	<SubTexture name="Area0011" x="2941" y="3566" width="2941" height="1783"/>
+	<SubTexture name="Area0012" x="0" y="5349" width="2941" height="1783"/>
+	<SubTexture name="Area0013" x="2941" y="5349" width="2941" height="1783"/>
+	<SubTexture name="Area0020" x="2941" y="5349" width="2941" height="1783"/>
+	<SubTexture name="Area0021" x="2941" y="5349" width="2941" height="1783"/>
+</TextureAtlas>
