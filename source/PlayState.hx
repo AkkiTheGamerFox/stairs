@@ -3217,17 +3217,18 @@ class PlayState extends MusicBeatState
 	{
 		super.beatHit();
         
-		if (curSong == 'climacophobia')
+		if (curBeat == 21 && curSong == 'climacophobia')
 			{
-			    switch (curBeat)
+				dad.playAnim('fuckingdeadlol', true);
+			   /* switch (curBeat)
 	            {
 		         case 0:
 					dad.playAnim('fuckingdeadlol', true);
-		        case 18:
+		         case 21:
 					remove(dad);
 					dad = new Character(100, 100, 'stairs');
 					add(dad);
- 	            }		
+ 	            }*/	
 			}
 
 		if (SONG.notes[Math.floor(curStep / 16)] != null)
