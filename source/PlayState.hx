@@ -129,6 +129,7 @@ class PlayState extends MusicBeatState
 	private var pauseHUD:FlxCamera;
 	private var camGame:FlxCamera;
 	public var modchart:ModChart;
+	var daPark:FlxSprite;
 
 	public var playerNoteOffsets:Array<Array<Float>> = [
 		[0,0], // left
@@ -197,6 +198,7 @@ class PlayState extends MusicBeatState
 	var accuracy:Float = 1;
 	var hitNotes:Float = 0;
 	var totalNotes:Float = 0;
+	var activelyHavingSex:Bool = false;
 
 	var grade:String = ScoreUtils.gradeArray[0];
 	var misses:Float = 0;
@@ -364,22 +366,20 @@ class PlayState extends MusicBeatState
                        
 			
 			      case 'climacophobia':
-				      {
-							curStage = 'park';
-
+					{
+						curStage = 'park';
 						defaultCamZoom = 0.80;
 
-						var bg:FlxSprite = new FlxSprite(-200, -100).loadGraphic(Paths.image('Fountain', 'shared'));
-						bg.antialiasing = true;
-						bg.animation.addByPrefix('idle', 'Area');
-						//bg.scrollFactor.set(0.2, 0.2);
-						bg.active = false;
-						bg.setGraphicSize(Std.int(bg.width * 0.9));
-						bg.updateHitbox();
-						bg.animation.play('idle');
-						add(bg);
+						//daPark = new FlxSprite(-1060, -163).loadGraphic(Paths.image('Fountain', 'shared'));
+						daPark = new FlxSprite(-1060, -163);
+						daPark.frames = Paths.getSparrowAtlas('Fountain', 'shared');
+						daPark.antialiasing = true;
+						daPark.animation.addByPrefix('idle', 'Area', 24, false);
+						daPark.updateHitbox();
+						daPark.animation.play('idle');
+						add(daPark);
 
-					  }
+					}
 			
 			
 			      case 'spookeez' | 'monster' | 'south':
@@ -786,6 +786,10 @@ class PlayState extends MusicBeatState
 		gf.scrollFactor.set(0.95, 0.95);
 
 		dad = new Character(100, 100, SONG.player2);
+		if (curSong.toLowerCase() == 'climacophobia') {
+			dad.playAnim('lol');
+			dad.visible = false;
+		}
 
 		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
 
@@ -813,6 +817,9 @@ class PlayState extends MusicBeatState
 				dad.y += 300;
 			case 'parents-christmas':
 				dad.x -= 500;
+			case 'stairs':
+				dad.y += 250;
+				dad.x -= 180;
 			case 'senpai':
 				dad.x += 150;
 				dad.y += 360;
@@ -856,6 +863,8 @@ class PlayState extends MusicBeatState
 				boyfriend.y += 220;
 				gf.x += 180;
 				gf.y += 300;
+			case 'park':
+				gf.visible = false;
 		}
 		if(boyfriend.curCharacter=='spirit'){
 			var evilTrail = new FlxTrail(boyfriend, null, 4, 24, 0.3, 0.069);
@@ -1184,6 +1193,11 @@ class PlayState extends MusicBeatState
 							});
 						});
 					});
+				case "climacophobia":
+					camHUD.visible = false;
+					FlxG.camera.zoom = 1.5;
+					camZooming = false;
+
 				case 'senpai':
 					schoolIntro(doof);
 				case 'roses':
@@ -1199,6 +1213,23 @@ class PlayState extends MusicBeatState
 		{
 			switch (curSong.toLowerCase())
 			{
+				case "climacophobia":
+					iconP2.changeCharacter('crystal');
+					//camHUD.visible = false;
+					activelyHavingSex = true;
+					dad.visible = true;
+					var blackScreen:FlxSprite = new FlxSprite(-FlxG.width, -FlxG.height).makeGraphic(Std.int(FlxG.width * 4), Std.int(FlxG.height * 4), FlxColor.BLACK);
+					add(blackScreen);
+					FlxTween.tween(blackScreen, {alpha: 0}, Conductor.crochet / 1000, {
+						ease: FlxEase.cubeInOut,
+						startDelay: 0.6
+					});
+
+					/*var shit:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x - 50, dad.getGraphicMidpoint().y + 50);
+					FlxG.camera.focusOn(shit);*/
+					//FlxG.camera.zoom = 1.5;
+					//camZooming = false;
+					startCountdown();
 				default:
 					startCountdown();
 			}
@@ -1362,7 +1393,8 @@ class PlayState extends MusicBeatState
 
 		startTimer = new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer)
 		{
-			dad.dance();
+			//dad.dance();
+			dad.playAnim('lol', true);
 			gf.dance();
 			boyfriend.playAnim('idle');
 
@@ -1387,61 +1419,69 @@ class PlayState extends MusicBeatState
 
 			{
 				case 0:
-					FlxG.sound.play(Paths.sound('intro3'), 0.6);
+					//if (curSong != 'Climacophobia') {
+						FlxG.sound.play(Paths.sound('intro3'), 0.6);
+					//}
 				case 1:
-					var ready:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[0]));
-					ready.scrollFactor.set();
-					ready.updateHitbox();
+					//if (curSong != 'Climacophobia') {
+						var ready:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[0]));
+						ready.scrollFactor.set();
+						ready.updateHitbox();
 
-					if (curStage.startsWith('school'))
-						ready.setGraphicSize(Std.int(ready.width * daPixelZoom));
+						if (curStage.startsWith('school'))
+							ready.setGraphicSize(Std.int(ready.width * daPixelZoom));
 
-					ready.screenCenter();
-					add(ready);
-					FlxTween.tween(ready, {y: ready.y += 100, alpha: 0}, Conductor.crochet / 1000, {
-						ease: FlxEase.cubeInOut,
-						onComplete: function(twn:FlxTween)
-						{
-							ready.destroy();
-						}
-					});
-					FlxG.sound.play(Paths.sound('intro2'), 0.6);
+						ready.screenCenter();
+						add(ready);
+						FlxTween.tween(ready, {y: ready.y += 100, alpha: 0}, Conductor.crochet / 1000, {
+							ease: FlxEase.cubeInOut,
+							onComplete: function(twn:FlxTween)
+							{
+								ready.destroy();
+							}
+						});
+						FlxG.sound.play(Paths.sound('intro2'), 0.6);
+					//}
 				case 2:
-					var set:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[1]));
-					set.scrollFactor.set();
+					//if (curSong != 'Climacophobia') {
+						var set:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[1]));
+						set.scrollFactor.set();
 
-					if (curStage.startsWith('school'))
-						set.setGraphicSize(Std.int(set.width * daPixelZoom));
+						if (curStage.startsWith('school'))
+							set.setGraphicSize(Std.int(set.width * daPixelZoom));
 
-					set.screenCenter();
-					add(set);
-					FlxTween.tween(set, {y: set.y += 100, alpha: 0}, Conductor.crochet / 1000, {
-						ease: FlxEase.cubeInOut,
-						onComplete: function(twn:FlxTween)
-						{
-							set.destroy();
-						}
-					});
-					FlxG.sound.play(Paths.sound('intro1'), 0.6);
+						set.screenCenter();
+						add(set);
+						FlxTween.tween(set, {y: set.y += 100, alpha: 0}, Conductor.crochet / 1000, {
+							ease: FlxEase.cubeInOut,
+							onComplete: function(twn:FlxTween)
+							{
+								set.destroy();
+							}
+						});
+						FlxG.sound.play(Paths.sound('intro1'), 0.6);
+					//}
 				case 3:
-					var go:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[2]));
-					go.scrollFactor.set();
+					//if (curSong != 'Climacophobia') {
+						var go:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[2]));
+						go.scrollFactor.set();
 
-					if (curStage.startsWith('school'))
-						go.setGraphicSize(Std.int(go.width * daPixelZoom));
+						if (curStage.startsWith('school'))
+							go.setGraphicSize(Std.int(go.width * daPixelZoom));
 
-					go.updateHitbox();
+						go.updateHitbox();
 
-					go.screenCenter();
-					add(go);
-					FlxTween.tween(go, {y: go.y += 100, alpha: 0}, Conductor.crochet / 1000, {
-						ease: FlxEase.cubeInOut,
-						onComplete: function(twn:FlxTween)
-						{
-							go.destroy();
-						}
-					});
-					FlxG.sound.play(Paths.sound('introGo'), 0.6);
+						go.screenCenter();
+						add(go);
+						FlxTween.tween(go, {y: go.y += 100, alpha: 0}, Conductor.crochet / 1000, {
+							ease: FlxEase.cubeInOut,
+							onComplete: function(twn:FlxTween)
+							{
+								go.destroy();
+							}
+						});
+						FlxG.sound.play(Paths.sound('introGo'), 0.6);
+					//}
 				case 4:
 			}
 
@@ -2056,6 +2096,11 @@ class PlayState extends MusicBeatState
 					case 'senpai-angry':
 						camFollow.y = dad.getMidpoint().y - 430;
 						camFollow.x = dad.getMidpoint().x - 100;
+					case 'stairs':
+						/*if (activelyHavingSex)
+							camFollow.setPosition(dad.getMidpoint().x, dad.getMidpoint().y - 350);
+						else*/
+							camFollow.setPosition(dad.getMidpoint().x + 150, dad.getMidpoint().y - 400);
 				}
 
 				if (dad.curCharacter == 'mom')
@@ -3221,18 +3266,79 @@ class PlayState extends MusicBeatState
 	{
 		super.beatHit();
         
-		if (curSong == 'climacophobia')
-			{	
-			    switch (curBeat)
-	            {
-		         case 0:
-					dad.playAnim('fuckingdeadlol', true);
-		         case 21:
-					remove(dad);
-					dad = new Character(100, 100, 'stairs');
-					add(dad);
- 	            }	
+		if (curSong.toLowerCase() == 'climacophobia')
+		{	
+			daPark.animation.play('idle', true);
+			var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
+			introAssets.set('default', ['ready', "set", "go"]);
+			introAssets.set('school', ['weeb/pixelUI/ready-pixel', 'weeb/pixelUI/set-pixel', 'weeb/pixelUI/date-pixel']);
+			introAssets.set('schoolEvil', ['weeb/pixelUI/ready-pixel', 'weeb/pixelUI/set-pixel', 'weeb/pixelUI/date-pixel']);
+			var introAlts:Array<String> = introAssets.get('default');
+			var altSuffix:String = "";
+
+			for (value in introAssets.keys())
+			{
+				if (value == curStage)
+				{
+					introAlts = introAssets.get(value);
+					altSuffix = '-pixel';
+				}
 			}
+			switch (curBeat)
+			{
+				case 1:
+					dad.playAnim('lol', true);
+
+				case 18:
+					iconP2.changeCharacter('stairs');
+					activelyHavingSex = false;
+					camZooming = true;
+					camHUD.visible = true;
+				case 19:
+					var ready:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[0]));
+					ready.scrollFactor.set();
+					ready.updateHitbox();
+
+					ready.screenCenter();
+					add(ready);
+					FlxTween.tween(ready, {y: ready.y += 100, alpha: 0}, Conductor.crochet / 1000, {
+						ease: FlxEase.cubeInOut,
+						onComplete: function(twn:FlxTween)
+						{
+							ready.destroy();
+						}
+					});
+				case 20:
+					var set:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[1]));
+					set.scrollFactor.set();
+
+					set.screenCenter();
+					add(set);
+					FlxTween.tween(set, {y: set.y += 100, alpha: 0}, Conductor.crochet / 1000, {
+						ease: FlxEase.cubeInOut,
+						onComplete: function(twn:FlxTween)
+						{
+							set.destroy();
+						}
+					});
+				case 21:
+					var go:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[2]));
+					go.scrollFactor.set();
+
+					go.updateHitbox();
+
+					go.screenCenter();
+					add(go);
+					FlxTween.tween(go, {y: go.y += 100, alpha: 0}, Conductor.crochet / 1000, {
+						ease: FlxEase.cubeInOut,
+						onComplete: function(twn:FlxTween)
+						{
+							go.destroy();
+						}
+					});
+					
+			}
+		}
 
 		if (SONG.notes[Math.floor(curStep / 16)] != null)
 		{
@@ -3248,7 +3354,7 @@ class PlayState extends MusicBeatState
 			// Conductor.changeBPM(SONG.bpm);
 
 			// Dad doesnt interupt his own notes
-			if (!dad.animation.curAnim.name.startsWith("sing"))
+			if (!dad.animation.curAnim.name.startsWith("sing") && dad.animation.curAnim.name != "lol")
 				dad.dance();
 
 		}

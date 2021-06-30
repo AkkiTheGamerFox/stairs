@@ -140,7 +140,7 @@ class Character extends FlxSprite
 				
 				loadOffsets();
 
-				playAnim("idle");
+				playAnim("lol");
 
 			case 'crystal':
 				tex = Paths.getSparrowAtlas('characters/crystal','shared');
@@ -221,7 +221,7 @@ class Character extends FlxSprite
 		var offsets:Array<String>;
 		if(Cache.offsetData[curCharacter]!=null){
 			offsets = CoolUtil.coolTextFile2(Cache.offsetData[curCharacter]);
-		}else{
+		} else {
 			var data = File.getContent("assets/shared/images/characters/"+curCharacter+"Offsets.txt");
 			offsets = CoolUtil.coolTextFile2(data);
 			Cache.offsetData[curCharacter] = data;
