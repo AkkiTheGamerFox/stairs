@@ -1194,9 +1194,16 @@ class PlayState extends MusicBeatState
 						});
 					});
 				case "climacophobia":
-					camHUD.visible = false;
-					FlxG.camera.zoom = 1.5;
-					camZooming = false;
+					iconP2.changeCharacter('crystal');
+					//camHUD.visible = false;
+					activelyHavingSex = true;
+					dad.visible = true;
+					var blackScreen:FlxSprite = new FlxSprite(-FlxG.width, -FlxG.height).makeGraphic(Std.int(FlxG.width * 4), Std.int(FlxG.height * 4), FlxColor.BLACK);
+					add(blackScreen);
+					FlxTween.tween(blackScreen, {alpha: 0}, Conductor.crochet / 1000, {
+						ease: FlxEase.cubeInOut,
+						startDelay: 0.6
+					});
 
 				case 'senpai':
 					schoolIntro(doof);
@@ -2580,7 +2587,7 @@ class PlayState extends MusicBeatState
 		else
 		{
 			trace('WENT BACK TO FREEPLAY??');
-			FlxG.switchState(new FreeplayState());
+			FlxG.switchState(new MainMenuState());
 			Cache.Clear();
 		}
 	}

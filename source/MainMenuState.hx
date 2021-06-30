@@ -27,9 +27,9 @@ class MainMenuState extends MusicBeatState
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
 	#if !switch
-	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options'];
+	var optionShit:Array<String> = ['story mode', 'donate', 'options'];
 	#else
-	var optionShit:Array<String> = ['story mode', 'freeplay'];
+	var optionShit:Array<String> = ['story mode'];
 	#end
 
 	var magenta:FlxSprite;
@@ -172,8 +172,17 @@ class MainMenuState extends MusicBeatState
 									switch (daChoice)
 									{
 										case 'story mode':
-											FlxG.switchState(new StoryMenuState());
-											trace("Story Menu Selected");
+											/*FlxG.switchState(new StoryMenuState());
+											trace("Story Menu Selected");*/
+											var poop:String = Highscore.formatSong('climacophobia', 2);
+
+											trace(poop);
+
+											PlayState.SONG = Song.loadFromJson(poop, 'climacophobia');
+											PlayState.isStoryMode = false;
+											PlayState.storyDifficulty = 2;
+											PlayState.storyWeek = 1;
+											LoadingState.loadAndSwitchState(new PlayState());
 										case 'freeplay':
 											FlxG.switchState(new FreeplayState());
 											trace("Freeplay Menu Selected");
@@ -189,8 +198,17 @@ class MainMenuState extends MusicBeatState
 									switch (daChoice)
 									{
 										case 'story mode':
-											FlxG.switchState(new StoryMenuState());
-											trace("Story Menu Selected");
+											/*FlxG.switchState(new StoryMenuState());
+											trace("Story Menu Selected");*/
+											var poop:String = Highscore.formatSong('climacophobia', 2);
+
+											trace(poop);
+
+											PlayState.SONG = Song.loadFromJson(poop, 'climacophobia');
+											PlayState.isStoryMode = false;
+											PlayState.storyDifficulty = 2;
+											PlayState.storyWeek = 1;
+											LoadingState.loadAndSwitchState(new PlayState());
 										case 'freeplay':
 											FlxG.switchState(new FreeplayState());
 											trace("Freeplay Menu Selected");
